@@ -1,5 +1,8 @@
 # ImageCompress
 ImageCompress是基于libjpeg-turbo来进行图片的压缩，它的优点在于相较于libjpeg来说压缩时间大大的缩短了（4.5M的图片压缩完耗时约1.2秒），而相较于Android系统的图片压缩来说ImageCompress在图片处理的过程使用了哈弗曼表，这大大的提高了相同体积下图片的清晰度。
+
+查看使用与效果可以去这里：https://blog.csdn.net/hh7181521/article/details/81014839
+
 一：添加依赖
   1、 对于Android Studio的用户，可以选择添加:
 
