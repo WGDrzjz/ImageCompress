@@ -35,6 +35,10 @@ public class GDCompressImageS {
                     for (int i = 0; i < imageBeanList.size(); i++) {
                         GDImageBean imageBean = imageBeanList.get(i);
                         String mPath = imageBean.getmGDConfig().getmPath();
+                        if (!GDTools.ImageTesting(mPath)){
+//                            InformCallError(1, "Incorrect picture format!");
+                            continue;
+                        }
                         String savePath = imageBean.getmGDConfig().getSavePath();
                         if (null==savePath|| TextUtils.isEmpty(savePath)){
                             GDConfig gdConfig = imageBean.getmGDConfig();
