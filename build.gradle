@@ -17,15 +17,36 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        jcenter()
-//        maven { url "https://dl.bintray.com/wangruijun/maven" }
+        maven { url "https://maven.aliyun.com/repository/jcenter"}
+        mavenCentral()/*方法超限解决方法第一步*/
+        maven { url "https://jitpack.io" }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven { url "https://dl.bintray.com/wangruijun/maven" }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+//        jcenter()
+        jcenter(){url "https://maven.aliyun.com/repository/jcenter"}
     }
     tasks.withType(Javadoc) {
         options.addStringOption('Xdoclint:none', '-quiet')
         options.addStringOption('encoding', 'UTF-8')
     }
 }
+
+//allprojects {
+//    repositories {
+//        google()
+//        jcenter()
+////        maven { url "https://dl.bintray.com/wangruijun/maven" }
+//    }
+//    tasks.withType(Javadoc) {
+//        options.addStringOption('Xdoclint:none', '-quiet')
+//        options.addStringOption('encoding', 'UTF-8')
+//    }
+//}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

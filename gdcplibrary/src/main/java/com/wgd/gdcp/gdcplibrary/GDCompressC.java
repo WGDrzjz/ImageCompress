@@ -33,6 +33,10 @@ public class GDCompressC {
 
     public void start(){
         if (null==mGDConfig)mGDConfig = new GDConfig();
+        if (!GDTools.ImageTesting(mGDConfig.getmPath())){
+            InformCallError(1, "Incorrect picture format!");
+            return;
+        }
         initSavePath();
         new Thread(new Runnable() {
             @Override
@@ -41,7 +45,7 @@ public class GDCompressC {
                     if (mGDConfig.getWidth() <=0 || mGDConfig.getHeight() <= 0){
                         Bitmap bitmap = null;
                         try {
-                            bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                            bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                         } catch (Exception e) {
                             e.printStackTrace();
                             bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());
@@ -62,7 +66,7 @@ public class GDCompressC {
                     }else {
                         Bitmap bitmap = null;
                         try {
-                            bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                            bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                         } catch (Exception e) {
                             e.printStackTrace();
                             bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());
@@ -84,7 +88,7 @@ public class GDCompressC {
                 }else {
                     Bitmap bitmap = null;
                     try {
-                        bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                        bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                     } catch (Exception e) {
                         e.printStackTrace();
                         bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());

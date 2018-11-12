@@ -48,7 +48,7 @@ public class GDCompressImageS {
                             if (mGDConfig.getWidth() <=0 || mGDConfig.getHeight() <= 0){
                                 Bitmap bitmap = null;
                                 try {
-                                    bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                                    bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());
@@ -74,7 +74,7 @@ public class GDCompressImageS {
                             }else {
                                 Bitmap bitmap = null;
                                 try {
-                                    bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                                    bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());
@@ -99,7 +99,7 @@ public class GDCompressImageS {
                         }else {
                             Bitmap bitmap = null;
                             try {
-                                bitmap = GDBitmapUtil.bitmapDegree(mGDConfig.getmPath());
+                                bitmap = GDBitmapUtil.bitmapDegree(mContext, mGDConfig.getmPath());
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 bitmap = BitmapFactory.decodeFile(mGDConfig.getmPath());

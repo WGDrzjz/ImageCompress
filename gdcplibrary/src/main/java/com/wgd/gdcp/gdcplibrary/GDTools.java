@@ -65,5 +65,12 @@ public class GDTools {
         if (a%2 == 1)a = a+1;
         return a ;
     }
+//
+    public static boolean ImageTesting(String path){
+        String mpath = path.toLowerCase();
+        if (mpath.endsWith("png") || mpath.endsWith("jpg") || mpath.endsWith("jpeg") || mpath.endsWith("webp") )
+        return true;
+        else return false ;
+    }
 
 }

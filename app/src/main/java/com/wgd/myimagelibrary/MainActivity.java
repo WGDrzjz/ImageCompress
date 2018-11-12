@@ -72,8 +72,36 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "请先选择图片！", Toast.LENGTH_LONG).show();
                 }else {
                     String tempCompressImgPath = mSelectedPath.get(0);//事先准备好的sd卡目录下的图片
+/*
 
-                    new GDCompressC(MainActivity.this, new GDConfig().setmPath(tempCompressImgPath).setChangeWH(true).setWidth(720).setHeight(1280), new GDCompressImageListener() {
+                    new GDCompress(MainActivity.this, tempCompressImgPath, tempCompressImgPath, new GDCompressImageListener() {
+                        @Override
+                        public void OnSuccess(String path) {
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    image_view_crop.setImageBitmap(BitmapFactory
+                                            .decodeFile(mSelectedPath.get(0)));
+                                    ImageInfoBean imageInfoBean = new ImageGetInfoUtil().getImageInfo(mSelectedPath.get(0));
+
+                                    txt_crop.setText("imageWidth=" + imageInfoBean.getWightHeightSize()[0] + "\n"
+                                            + "imageHeight=" + imageInfoBean.getWightHeightSize()[1] + "\n"
+                                            + "imageSize=" + imageInfoBean.getFileSize() + "\n"
+                                            + "" );
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void OnError(int code, String errorMsg) {
+
+                        }
+                    });
+*/
+
+                  new GDCompressC(MainActivity.this,
+                          new GDConfig().setmPath(tempCompressImgPath), new GDCompressImageListener() {
+//                          new GDConfig().setmPath(tempCompressImgPath).setChangeWH(true), new GDCompressImageListener() {
                         @Override
                         public void OnSuccess(String path) {
                             MainActivity.this.runOnUiThread(new Runnable() {

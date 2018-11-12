@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -48,7 +48,7 @@ publish {
     userOrg = 'wangruijun'
     groupId = 'com.wgd.gdcp.gdcplibrary'
     artifactId = 'ImageCompress'
-    version = '1.0.8'
+    version = '1.0.9'
     description = ''
     website = ""
 }
