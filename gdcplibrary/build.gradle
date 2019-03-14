@@ -52,7 +52,7 @@ publish {
     groupId = 'com.wgd.gdcp.gdcplibrary'
     artifactId = 'ImageCompress'
     version = '1.0.10'
-    description = 'In the process of compression, OOM problem is optimized, image format is filtered, and so on.'
+    description = 'OOM problem optimization, image batch compression and so on in the compression process'
     website = "https://github.com/WGDrzjz/ImageCompress"
 }
 

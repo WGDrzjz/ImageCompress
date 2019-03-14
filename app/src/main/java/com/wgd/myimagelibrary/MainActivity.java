@@ -42,7 +42,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-
+/*
+*
+* //gradlew clean build bintrayUpload -PbintrayUser=wangruijun -PbintrayKey=a0d662943bb4c5ae83cd3d539113c91b04570499 -PdryRun=false
+* */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "GDCimage";

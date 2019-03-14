@@ -68,3 +68,4 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+tasks.getByPath(":gdcplibrary:releaseAndroidJavadocs").enabled = false
