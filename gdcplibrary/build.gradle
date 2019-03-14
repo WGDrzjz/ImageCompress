@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
+//apply plugin: 'maven'
 apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 27
@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.0.10"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -42,14 +42,17 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // 添加依赖
+    implementation "com.github.yjfnypeu:EasyThread:0.6.0"
 }
 
 publish {
     userOrg = 'wangruijun'
     groupId = 'com.wgd.gdcp.gdcplibrary'
     artifactId = 'ImageCompress'
-    version = '1.0.9'
-    description = ''
-    website = ""
+    version = '1.0.10'
+    description = 'In the process of compression, OOM problem is optimized, image format is filtered, and so on.'
+    website = "https://github.com/WGDrzjz/ImageCompress"
 }
 

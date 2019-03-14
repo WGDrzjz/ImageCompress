@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 
 public class GDCompressUtil {
 
@@ -35,27 +36,86 @@ public class GDCompressUtil {
     /*
      * 系统压缩，图片大小会改变，以1280为基准
      */
+    public Bitmap SysCompressMin(String imgFilePath) throws Exception {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        FileInputStream inputStream = null;
+        int imgWidth = 0 ;
+        int imgHeight = 0 ;
+        try {
+            inputStream = new FileInputStream(imgFilePath);
+            BitmapFactory.decodeStream(inputStream, null, options);//由于options.inJustDecodeBounds位true，所以这里并没有在内存中解码图片，只是为了得到原始图片的大小
+            imgWidth = options.outWidth;
+            imgHeight = options.outHeight;
+        }catch (Exception e){e.printStackTrace();}
+        if(inputStream != null){
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+            }
+        }
+        options.inJustDecodeBounds = false ;
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = computeSize(imgWidth, imgHeight);
+
+//        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(imgFilePath);
+            return BitmapFactory.decodeStream(inputStream, null, options);//加载原图
+        }catch (Exception e){e.printStackTrace();}
+
+        return null;
+    }
+    /*
+     * 系统压缩，图片大小会改变，以1280为基准
+     */
     public Bitmap SysCompressMin(Bitmap bitmap) throws Exception {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = computeSize(bitmap.getWidth(), bitmap.getHeight());
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        Bitmap tagBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
-        return tagBitmap;
+//        Bitmap tagBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+//        return tagBitmap;
+        bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+        return bitmap;
     }
     /*
      * 系统压缩，图片大小会改变，
      */
-    public Bitmap SysCompressMySamp(Bitmap bitmap, int width, int height) throws Exception {
+    public Bitmap SysCompressMySamp(String imgFilePath, int width, int height) throws Exception {
+
+
         BitmapFactory.Options options = new BitmapFactory.Options();
-        int samp = GDTools.getSampWHforImage(bitmap.getWidth(), bitmap.getHeight(), width, height);
+        options.inJustDecodeBounds = true;
+        FileInputStream inputStream = null;
+        int imgWidth = 0 ;
+        int imgHeight = 0 ;
+        try {
+            inputStream = new FileInputStream(imgFilePath);
+            BitmapFactory.decodeStream(inputStream, null, options);//由于options.inJustDecodeBounds位true，所以这里并没有在内存中解码图片，只是为了得到原始图片的大小
+            imgWidth = options.outWidth;
+            imgHeight = options.outHeight;
+        }catch (Exception e){e.printStackTrace();}
+        if(inputStream != null){
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+            }
+        }
+        options.inJustDecodeBounds = false ;
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+        int samp = GDTools.getSampWHforImage(imgWidth, imgHeight, width, height);
         options.inSampleSize = samp;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        Bitmap tagBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
-        return tagBitmap;
+
+//        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(imgFilePath);
+            return BitmapFactory.decodeStream(inputStream, null, options);//加载原图
+        }catch (Exception e){e.printStackTrace();}
+
+        return null;
     }
 
 

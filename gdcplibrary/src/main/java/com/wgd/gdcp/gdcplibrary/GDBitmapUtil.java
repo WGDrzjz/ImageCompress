@@ -20,7 +20,7 @@ public class GDBitmapUtil {
     public static int[] getBitmapWH(String path){
         int whSize[] = new int[2];
 //        BitmapFactory.Options options = new BitmapFactory.Options();
-//        //设置为true,表示解析Bitmap对象，该对象不占内存
+//
 //        options.inJustDecodeBounds = true;
 //        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
 //        whSize[0] = bitmap.getWidth();
@@ -79,7 +79,7 @@ public class GDBitmapUtil {
         }catch (Exception e){
             bitmap = adjustImage(mContext, path, 2);
         }
-
+        boolean isRotate = false ;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
             Matrix matrix = new Matrix();
@@ -88,22 +88,26 @@ public class GDBitmapUtil {
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     angle = 90;
+                    isRotate = true ;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     angle = 180;
+                    isRotate = true ;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     angle = 270;
+                    isRotate = true ;
                     break;
             }
             matrix.postRotate(angle);
 //        BitmapFactory.Options options = new BitmapFactory.Options();
-//        //设置为true,表示解析Bitmap对象，该对象不占内存
+//
 //        options.inJustDecodeBounds = true;
 //        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
 
 //        return Bitmap.createBitmap(bitmap, 0, 0, options.outWidth, options.outHeight, matrix, true);
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            if (isRotate)return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            else return bitmap ;
         }catch (Exception e){e.printStackTrace();}
         return bitmap ;
 
@@ -112,23 +116,23 @@ public class GDBitmapUtil {
     private static Bitmap adjustImage(Context mContext, String absolutePath, int size) {
         Bitmap bm = null ;
         BitmapFactory.Options opt = new BitmapFactory.Options();
-        // 这个isjustdecodebounds很重要
+        //
         opt.inJustDecodeBounds = true;
-        bm = BitmapFactory.decodeFile(absolutePath, opt);
+//        bm = BitmapFactory.decodeFile(absolutePath, opt);
 
-        // 获取到这个图片的原始宽度和高度
+        //
         int picWidth = opt.outWidth;
         int picHeight = opt.outHeight;
 
-        // 获取屏的宽度和高度
+        //
         WindowManager windowManager = ((Activity)mContext).getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         int screenWidth = display.getWidth();
         int screenHeight = display.getHeight();
 
-        // isSampleSize是表示对图片的缩放程度，比如值为2图片的宽度和高度都变为以前的1/2
+        //
         opt.inSampleSize = 1;
-        // 根据屏的大小和图片大小计算出缩放比例
+        //
         if (picWidth > picHeight) {
             if (picWidth > screenWidth)
                 opt.inSampleSize = picWidth / screenWidth;
@@ -138,7 +142,7 @@ public class GDBitmapUtil {
         }
 
         if (opt.inSampleSize<=1)opt.inSampleSize = size ;
-        // 这次再真正地生成一个有像素的，经过缩放了的bitmap
+        //
         opt.inJustDecodeBounds = false;
         try {
             bm= BitmapFactory.decodeFile(absolutePath, opt);
@@ -147,7 +151,7 @@ public class GDBitmapUtil {
         }
         return bm ;
     }
-
+//:gdcplibrary:bintrayUpload
     public static void saveBitmapDegree(String path){
         try {
             //
@@ -169,13 +173,27 @@ public class GDBitmapUtil {
             matrix.postRotate(angle);
             if (angle != 0){
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                //设置为true,表示解析Bitmap对象，该对象不占内存
+                //
                 options.inJustDecodeBounds = true;
                 Bitmap bitmap = BitmapFactory.decodeFile(path, options);
                 File saveBitmapFile = saveBitmapFile(Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true), path);
             }
         }catch (Exception e){e.printStackTrace();}
 
+    }
+
+    public static Bitmap getBitmap(String path){
+        try {
+            return BitmapFactory.decodeFile(path);
+
+        }catch (Exception e){e.printStackTrace();}
+        Log.i("GDCimage", "getBitmap: ==============02==============");
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        //
+//                options.inJustDecodeBounds = true;
+        options.inSampleSize = 2 ;
+        Log.i("GDCimage", "getBitmap: ==============01==============");
+        return BitmapFactory.decodeFile(path, options);
     }
 
 

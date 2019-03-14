@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.wgd.gdcp.gdcplibrary.thread.ThreadManager;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,49 +19,49 @@ import java.util.List;
  * android.permission.WRITE_EXTERNAL_STORAGE
  * android.permission.READ_EXTERNAL_STORAGE
 *
-* 备注：20190314
-* 通过处理批量压缩发现：
-* 这个逻辑的处理方式由于每创建一个线程，都会在线程中产生新的Bitmap，
-* 所以产生OOM的几率比较大
-* 故这里应该禁止通过循环调用此方式来大量处理图片
+* 这个处理方式中的优点是：
+* 使用单线程线程池，并将Bitmap设为全局变量
+* 只要只有一个GDCompressA实例
+* 那么循环调用压缩很多图片时大大降低了OOM的几率
+* 缺点是：
+* 这种方式导致批量压缩时线性的，处理时间将被拉长
 *
 * */
-public class GDCompressC {
+public class GDCompressA {
 
     private Context mContext;
-    private GDCompressImageListener mGDCompressImageListener;
+    private GDCompressImageListenerA mGDCompressImageListener;
 
+    Bitmap bitmapMin = null;
 
-
-    //为了将Bitmap释放使用
-    private List<Bitmap> garbage = new ArrayList<>();
-
-    public GDCompressC(Context context, GDConfig mGDConfig, GDCompressImageListener mGDCompressImageListener){
-        this.mContext = context ;
-        this.mGDCompressImageListener = mGDCompressImageListener ;
-        start(mGDConfig);
-    }
-
-    public GDCompressC(Context context, GDCompressImageListener mGDCompressImageListener){
+    public GDCompressA(Context context, GDCompressImageListenerA mGDCompressImageListener){
         this.mContext = context ;
         this.mGDCompressImageListener = mGDCompressImageListener ;
     }
 
+    public GDCompressA(Context context, GDImageBean  mGDImageBean, GDCompressImageListenerA mGDCompressImageListener){
+        this.mContext = context ;
+        this.mGDCompressImageListener = mGDCompressImageListener ;
+        start(mGDImageBean);
+    }
 
-    public void start(GDConfig gdConfig){
+    public void start(GDImageBean  mGDImageBean){
+        GDConfig gdConfig = null;
+        if (null!=mGDImageBean) gdConfig = mGDImageBean.getmGDConfig();
         if (null==gdConfig)gdConfig = new GDConfig();
         if (!GDTools.ImageTesting(gdConfig.getmPath())){
-            InformCallError(1, "Incorrect picture format!");
+            InformCallError(1, "Incorrect picture format!", mGDImageBean);
             return;
         }
-        if (null==gdConfig.getSavePath() || TextUtils.equals("", gdConfig.getSavePath())){
-            gdConfig.setSavePath(gdConfig.getmPath());
+        final GDConfig mGDConfig = gdConfig ;
+        if (null==mGDConfig.getSavePath() || TextUtils.equals("", mGDConfig.getSavePath())){
+            mGDConfig.setSavePath(mGDConfig.getmPath());
         }
-        final GDConfig mGDConfig = gdConfig;
-        ThreadManager.getIO().execute(new Runnable() {
+        mGDImageBean.setmGDConfig(mGDConfig);
+        final GDImageBean  gdImageBean = mGDImageBean;
+        ThreadManager.getIO1().execute(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmapMin = null;
                 if (mGDConfig.isChangeWH()) {
                     if (mGDConfig.getWidth() <= 0 || mGDConfig.getHeight() <= 0) {
                         try {
@@ -75,14 +71,13 @@ public class GDCompressC {
                             e.printStackTrace();
                         }
 
-                        garbage.add(bitmapMin);
                         if (null== bitmapMin){
-                            InformCallError(0, "Image compression failure!");
+                            InformCallError(0, "Image compression failure!", gdImageBean);
                         }else {
                             if (new GDCompressUtil().compressLibJpeg(bitmapMin, mGDConfig.getSavePath())) {
-                                InformCallSuccess(mGDConfig.getSavePath());
+                                InformCallSuccess(mGDConfig.getSavePath(), gdImageBean);
                             } else {
-                                InformCallError(0, "Image compression failure!");
+                                InformCallError(0, "Image compression failure!", gdImageBean);
                             }
                         }
 
@@ -95,14 +90,13 @@ public class GDCompressC {
                             e.printStackTrace();
                         }
 
-                        garbage.add(bitmapMin);
                         if (null== bitmapMin){
-                            InformCallError(0, "Image compression failure!");
+                            InformCallError(0, "Image compression failure!", gdImageBean);
                         }else {
                             if (new GDCompressUtil().compressLibJpeg(bitmapMin, mGDConfig.getSavePath())) {
-                                InformCallSuccess(mGDConfig.getSavePath());
+                                InformCallSuccess(mGDConfig.getSavePath(), gdImageBean);
                             } else {
-                                InformCallError(0, "Image compression failure!");
+                                InformCallError(0, "Image compression failure!", gdImageBean);
                             }
                         }
 
@@ -116,76 +110,67 @@ public class GDCompressC {
                         bitmapMin = BitmapFactory.decodeFile(mGDConfig.getmPath());
                     }
 
-                    garbage.add(bitmapMin);
                     if (null== bitmapMin){
-                        InformCallError(0, "Image compression failure!");
+                        InformCallError(0, "Image compression failure!", gdImageBean);
                     }else
                     if (new GDCompressUtil().compressLibJpeg(bitmapMin, mGDConfig.getSavePath())) {
-                        InformCallSuccess(mGDConfig.getSavePath());
+                        InformCallSuccess(mGDConfig.getSavePath(), gdImageBean);
                     } else {
-                        InformCallError(0, "Image compression failure!");
+                        InformCallError(0, "Image compression failure!", gdImageBean);
                     }
                 }
             }
         });
     }
 
-    private void InformCallSuccess(final String path){
+    private void InformCallSuccess(final String path, GDImageBean  mGDImageBean){
         try {
             GDBitmapUtil.saveBitmapDegree(path);
         }catch (Exception e){e.printStackTrace();}
         try {
-            if (null!=garbage && garbage.size()>0){
-                for (int i = 0; i < garbage.size(); i++) {
-                    Bitmap bitmap = garbage.get(i);
-                    if(bitmap != null && !bitmap.isRecycled()){
-                        bitmap.recycle();
-                        bitmap = null;
-                    }
-                }
-                garbage.clear();
+            if (null!=bitmapMin ){
+                bitmapMin.recycle();
+                bitmapMin = null;
                 System.gc();
             }
         }catch (Exception e){e.printStackTrace();}
+        mGDImageBean.setCode(0);
         try {
+            final GDImageBean  gDImageBean =  mGDImageBean;
             ((Activity) mContext).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (null!= mGDCompressImageListener) mGDCompressImageListener.OnSuccess(path);
+                    if (null!= mGDCompressImageListener) mGDCompressImageListener.OnSuccess(gDImageBean);
                 }
             });
         }catch (Exception e){
             e.printStackTrace();
-            if (null!= mGDCompressImageListener) mGDCompressImageListener.OnSuccess(path);
+            if (null!= mGDCompressImageListener) mGDCompressImageListener.OnSuccess(mGDImageBean);
         }
     }
-    private void InformCallError(final int code, final String errorMsg){
+    private void InformCallError(final int code, final String errorMsg, final GDImageBean  mGDImageBean){
         try {
-            if (null!=garbage && garbage.size()>0){
-                for (int i = 0; i < garbage.size(); i++) {
-                    Bitmap bitmap = garbage.get(i);
-                    if(bitmap != null && !bitmap.isRecycled()){
-                        bitmap.recycle();
-                        bitmap = null;
-                    }
-                }
-                garbage.clear();
+            if (null!=bitmapMin ){
+                bitmapMin.recycle();
+                bitmapMin = null;
                 System.gc();
             }
         }catch (Exception e){e.printStackTrace();}
+        mGDImageBean.setCode(code);
+        mGDImageBean.setErrorMsg(errorMsg);
         try {
+            final GDImageBean  gDImageBean =  mGDImageBean;
             ((Activity) mContext).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (null!= mGDCompressImageListener) mGDCompressImageListener.OnError(code, errorMsg);
+                    if (null!= mGDCompressImageListener) mGDCompressImageListener.OnError(gDImageBean);
                 }
             });
         }catch (Exception e){
             e.printStackTrace();
-            if (null!= mGDCompressImageListener) mGDCompressImageListener.OnError(code, errorMsg);
+            if (null!= mGDCompressImageListener) mGDCompressImageListener.OnError(mGDImageBean);
         }
     }
-
 
 
 }

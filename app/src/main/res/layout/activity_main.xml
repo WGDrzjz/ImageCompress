@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="图片剪切"/>
+                android:text="图片压缩1"/>
 
             <ImageView
                 android:id="@+id/image_view_crop"
@@ -50,6 +50,50 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"/>
+            <Button
+                android:id="@+id/btn_img_c2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="图片压缩2"/>
+
+            <ImageView
+                android:id="@+id/image_view_c2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:id="@+id/txt_c2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/btn_img_c3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="图片压缩3"/>
+
+            <ImageView
+                android:id="@+id/image_view_c3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:id="@+id/txt_c3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/btn_img_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="多图片压缩"/>
 
         </LinearLayout>
     </ScrollView>

@@ -9,15 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+//import butterknife.BindView;
+//import butterknife.ButterKnife;
 
 public class BagImageActivity extends AppCompatActivity {
 
-    @BindView(R.id.image)
-    ImageView image ;
-    @BindView(R.id.txt_image_info)
-    TextView txt_image_info ;
+//    @BindView(R.id.image)
+//    ImageView image ;
+//    @BindView(R.id.txt_image_info)
+//    TextView txt_image_info ;
 
     public static void start(Activity activity, String path){
         Intent intent = new Intent(activity, BagImageActivity.class);
@@ -29,10 +29,14 @@ public class BagImageActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_bag);
-        ButterKnife.bind(this);
+//        ButterKnife.bind(this);
         String path = getIntent().getStringExtra("path");
-        image.setImageBitmap(BitmapFactory
-                .decodeFile(path));
+//        image.setImageBitmap(BitmapFactory
+//                .decodeFile(path));
+
+
+
+
 //        Bitmap bitmap = BitmapFactory.decodeFile(path);
 
 //        ImageInfoBean imageInfoBean = new ImageGetInfoUtil().getImageInfo(path);

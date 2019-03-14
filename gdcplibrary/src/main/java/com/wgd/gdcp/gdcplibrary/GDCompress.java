@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
+import com.wgd.gdcp.gdcplibrary.thread.ThreadManager;
+
 public class GDCompress {
 
     private Context mContext;
@@ -25,7 +27,7 @@ public class GDCompress {
     }
 
     private void startCompress(){
-        new Thread(new Runnable() {
+        ThreadManager.getIO().execute(new Runnable() {
             @Override
             public void run() {
                 if (compressLibJpeg(mPath)){
@@ -34,7 +36,7 @@ public class GDCompress {
                     InformCallError(0, "Image compression failure!");
                 }
             }
-        }).start();
+        });
     }
 
     private void InformCallSuccess(final String path){
