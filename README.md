@@ -4,16 +4,16 @@ ImageCompress是基于libjpeg-turbo来进行图片的压缩，它的优点在于
 查看使用与效果可以去这里：https://blog.csdn.net/hh7181521/article/details/81014839
 
 
-特别声明：最近才发现貌似1.0.9有问题，大家可以先使用1.0.8版本
+特别声明：终于有时间来处理这个了，这次优化了OOM问题，总体上讲提供了两种方式（1、耗时短但OOM几率大；2、耗时长但OOM几率很小）
 
 
 一：添加依赖
   1、 对于Android Studio的用户，可以选择添加:
 
 
-    compile 'com.wgd.gdcp.gdcplibrary:ImageCompress:1.0.8'
+    compile 'com.wgd.gdcp.gdcplibrary:ImageCompress:1.0.10'
 或
-implementation 'com.wgd.gdcp.gdcplibrary:ImageCompress:1.0.8'
+implementation 'com.wgd.gdcp.gdcplibrary:ImageCompress:1.0.10'
     如果报错的话可以在项目的build.gradle中加入
 
     allprojects {
